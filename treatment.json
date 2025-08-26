@@ -1,0 +1,194 @@
+{
+    "intents": [
+      {
+        "intent": "heat_exhaustion",
+        "patterns": [
+          "What should I do for heat exhaustion?",
+          "Someone is experiencing heat exhaustion"
+        ],
+        "responses": [
+          "1. Move the person to a cooler environment.\n2. Loosen or remove clothing.\n3. Apply cool, wet cloth, and give small amounts of cool fluid.\n4. Monitor for any changes in condition and avoid resuming normal activities the same day."
+        ]
+      },
+      {
+        "intent": "choking",
+        "patterns": [
+          "What to do when someone is choking",
+          "Someone is choking, what should I do?",
+          "What should I do when someone is choking?"
+        ],
+        "responses": [
+          "Mild choking:\n1. Encourage them to cough to clear the blockage and monitor.\n\nSevere choking:\n1. Perform 5 back blows: Stand behind the person, place one hand on their chest, bend them forward, and use the heel of your other hand to deliver sharp back blows between the shoulder blades.\n2. Check the airway after each blow.\n3. If unresponsive, call for help and start CPR."
+        ]
+      },
+      {
+        "intent": "hypothermia",
+        "patterns": [
+          "What should I do if someone has hypothermia?",
+          "Someone is having hypothermia, what should I do?"
+        ],
+        "responses": [
+          "1. Move the person to a warm place, remove wet clothing, and warm the body gradually with blankets and dry clothing.\n2. Avoid warming too quickly. Provide warm liquids that do not contain alcohol or caffeine."
+        ]
+      },
+      {
+        "intent": "insect_sting",
+        "patterns": [
+          "What should I do if someone is stung by an insect?",
+          "I got stung by an insect",
+          "Someone got stung by an insect"
+        ],
+        "responses": [
+          "1. Remove the stinger using a clean fingernail, plastic card, or tweezers.\n2. Wash the site with soap and water.\n3. Cover the site and keep it clean.\n4. Apply a cold pack to reduce pain and swelling.\n5. Call 9-1-1 if there is trouble breathing or signs of anaphylaxis."
+        ]
+      },
+      {
+        "intent": "tick_borne_disease_treatment",
+        "patterns": [
+          "What is the first aid for tick-borne diseases?"
+        ],
+        "responses": [
+          "Seek medical care if symptoms like fever, fatigue, or muscle aches occur after a tick bite, as antibiotics may be necessary."
+        ]
+      },
+      {
+        "intent": "rocky_mountain_spotted_fever_symptoms",
+        "patterns": [
+          "What are the symptoms of Rocky Mountain spotted fever?"
+        ],
+        "responses": [
+          "Initial symptoms: Fever, nausea, vomiting, muscle aches, lack of appetite, and severe headache.\nLater symptoms: Rash, abdominal pain, joint pain, and diarrhea."
+        ]
+      },
+      {
+        "intent": "babesia_infection_treatment",
+        "patterns": [
+          "When should someone seek medical care for Babesia infection?"
+        ],
+        "responses": [
+          "Seek medical care for symptoms of Babesia infection, as it can be treated with prescription medications."
+        ]
+      },
+      {
+        "intent": "ehrlichiosis_treatment",
+        "patterns": [
+          "When should someone seek medical care for Ehrlichiosis?"
+        ],
+        "responses": [
+          "Seek medical care if symptoms of Ehrlichiosis appear, as antibiotics can treat it."
+        ]
+      },
+      {
+        "intent": "spider_bite",
+        "patterns": [
+          "How should I care for a venomous spider bite or scorpion sting?",
+          "I got bitten by a spider",
+          "Someone got bitten by a scorpion"
+        ],
+        "responses": [
+          "1. Wash the wound thoroughly and apply antibiotic ointment (if no allergies).\n2. Bandage the wound and apply an ice pack to reduce pain and swelling.\n3. Seek medical attention.\n4. Keep the affected area elevated and still during transport to a medical facility."
+        ]
+      },
+      {
+        "intent": "venomous_snakebite",
+        "patterns": [
+          "What should I do if I got bitten by a venomous snake?",
+          "venomous snakebite"
+        ],
+        "responses": [
+          "1. Call for medical help immediately.\n2. Keep the victim calm and immobilize the affected area, keeping it below heart level.\n3. Avoid sucking out the venom, applying ice, or using a tourniquet."
+        ]
+      },
+      {
+        "intent": "asthma",
+        "patterns": [
+          "What to do in an asthma attack?",
+          "Someone is having an asthma attack"
+        ],
+        "responses": [
+          "1. Help the person into a comfortable position and reassure them.\n2. Assist them in using their inhaler and loosen tight clothing.\n3. Keep them calm until the attack subsides.\n4. Call EMS if the inhaler is unavailable, ineffective, or if the person has severe difficulty breathing."
+        ]
+      },
+      {
+        "intent": "severe_bleeding",
+        "patterns": [
+          "What to do if someone is severely bleeding?",
+          "Someone is bleeding severely"
+        ],
+        "responses": [
+          "1. Apply direct pressure with a dressing to reduce infection risk.\n2. Help the person lie down and access EMS.\n3. Use a barrier (e.g., cloth or bandage) between your hand and the wound if applying pressure."
+        ]
+      },
+      {
+        "intent": "cut",
+        "patterns": [
+          "What to do when someone cut himself accidentally?",
+          "Someone has a cut",
+          "Someone has a wound"
+        ],
+        "responses": [
+          "1. Apply direct pressure to stop bleeding, then clean the wound with water once bleeding stops.\n2. Dry the area and cover it with a dressing.\n3. Use an adhesive bandage if no dressing is available."
+        ]
+      },
+      {
+        "intent": "burn",
+        "patterns": [
+          "What to do if I have burn injuries?",
+          "Someone burned himself"
+        ],
+        "responses": [
+          "1. Cool the burn with clean, running water for 10 to 20 minutes.\n2. Avoid using ice-cold water or applying ice.\n3. Remove any loose clothing or jewelry near the burn.\n4. Leave blisters intact and seek medical help if necessary.\n5. Cover the burn with a moist, non-stick dressing.\n6. Call EMS if the burn is severe, large, or in sensitive areas."
+        ]
+      },
+      {
+        "intent": "fracture",
+        "patterns": [
+          "What to do when someone has a fracture?",
+          "Someone fractured his feet",
+          "Someone fractured his hand",
+          "What to do when someone sprains?",
+          "What to do when someone strains?"
+        ],
+        "responses": [
+          "1. Call for help.\n2. Keep the injury still and support it in a comfortable position.\n3. For open fractures, stop bleeding before stabilizing the injury."
+        ]
+      },
+      {
+        "intent": "dental_avulsion",
+        "patterns": [
+          "What to do when a tooth is forcefully knocked out of a person's mouth?"
+        ],
+        "responses": [
+          "1. Stop the bleeding with gauze or clean cotton.\n2. Protect the mouth from sharp edges with clean cotton.\n3. Carefully pick up the tooth by the crown and seek a dentist immediately."
+        ]
+      },
+      {
+        "intent": "blister",
+        "patterns": [
+          "What to do when I have a blister?"
+        ],
+        "responses": [
+          "1. Wash the blister and surrounding area with clean water, then pat dry.\n2. Cover intact blisters with moleskin or a blister pad.\n3. For drained blisters, clean and cover with sterile dressing."
+        ]
+      },
+      {
+        "intent": "thank_you",
+        "patterns": [
+          "Thank you, Ember"
+        ],
+        "responses": [
+          "I'm happy to help. Keep safe always!"
+        ]
+      },
+      {
+        "intent": "hello",
+        "patterns": [
+          "Hello"
+        ],
+        "responses": [
+          "Hi, how can i help you?"
+        ]
+      }
+    ]
+  }
+  

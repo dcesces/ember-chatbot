@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ember Chatbot</title>
+    <style>
+        /* General styles for body */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(135deg, #a31515, #972910);
+        }
+
+        /* Background Decorations */
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .circle.small {
+            width: 50px;
+            height: 50px;
+        }
+
+        .circle.medium {
+            width: 100px;
+            height: 100px;
+        }
+
+        .circle.large {
+            width: 150px;
+            height: 150px;
+        }
+        .circle:nth-child(1) {
+            top: 10%;
+            left: 15%;
+            animation-delay: 0s;
+        }
+        .circle:nth-child(2) {
+            top: 60%;
+            left: 20%;
+            animation-delay: 1s;
+        }
+        .circle:nth-child(3) {
+            top: 30%;
+            left: 70%;
+            animation-delay: 2s;
+        }
+
+        .circle:nth-child(4) {
+            top: 80%;
+            left: 50%;
+            animation-delay: 3s;
+        }
+
+        .circle:nth-child(5) {
+            top: 20%;
+            left: 90%;
+            animation-delay: 4s;
+        }
+
+        /*#listening-indicator {
+         font-style: italic;
+        opacity: 0.8; 
+}*/
+
+
+        /* Float Animation */
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        /* Styles for the opening page */
+        .opening-container {
+            text-align: center;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .opening-container h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .opening-container img {
+            width: 150px;
+            height: 150px;
+            margin-bottom: 20px;
+            border-radius: 50%;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .opening-container button {
+            padding: 12px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 25px;
+            background-color: #fff;
+            color: #9a2311;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .opening-container button:hover {
+            background-color: #e6e6e6;
+            transform: scale(1.1);
+        }
+
+        /* Chat Container */
+        .chat-container {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            max-width: 400px;
+            height: 600px;
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        /* Chat Header */
+        .chat-header {
+            background: linear-gradient(90deg, #a31515, #c51515);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Messages Section */
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            background: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* Message Bubbles */
+        .message {
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+        @media (max-width: 768px) {
+        .chat-container {
+            width: 100%;
+            height: 90vh;
+        }
+        .input-container input {
+            font-size: 14px;
+        }
+    }
+
+        .user-message {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .bot-message {
+            align-self: flex-start;
+        }
+
+        /* User Avatar Styles (Updated) */
+        .user-avatar {
+            width: 40px; /* Fixed width */
+            height: 40px; /* Fixed height */
+            border-radius: 50%; /* Circle shape */
+            background: #a31515; /* Background color for user */
+            display: flex; /* Centering text */
+            justify-content: center; /* Centering text */
+            align-items: center; /* Centering text */
+            color: white; /* Text color */
+            font-size: 16px; /* Text size */
+            font-weight: bold; /* Bold text */
+            text-transform: uppercase; /* Uppercase text */
+        }
+
+        /* Bot Avatar Styles (Updated) */
+        .bot-avatar img {
+            width: 40px; /* Fixed width */
+            height: 40px; /* Fixed height */
+            border-radius: 50%; /* Circle shape */
+            object-fit: cover; /* Ensure image fits inside the circle */
+        }
+
+        /* Message Text */
+        .message-text {
+            max-width: 70%;
+            padding: 10px 15px;
+            border-radius: 15px;
+            font-size: 14px;
+            line-height: 1.5;
+            box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-text {
+            background: #d1e7dd;
+            color: #333;
+        }
+
+        .bot-text {
+            background: #e9ecef;
+            color: #333;
+        }
+
+        /* Input Section */
+        .input-container {
+            display: flex;
+            padding: 10px;
+            background: white;
+            border-top: 1px solid #ddd;
+        }
+
+        .input-container input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .input-container button {
+            margin-left: 10px;
+            padding: 10px 20px;
+            background: linear-gradient(90deg, #a31515, #c51010);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .input-container button:hover {
+            background: #cc2e02;
+            transform: scale(1.1);
+        }
+            /* Modal Background */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); /* Darker background for focus */
+            backdrop-filter: blur(5px); /* Blur effect */
+        }
+
+        /* Modal Content */
+        .modal-content {
+            background: linear-gradient(120deg, #a50a0af4, #f2f7f86a); /* Gradient background */
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 15px;
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+            color: white;
+            animation: slideIn 0.5s ease; /* Animation */
+        }
+
+        .modal-content .highlight {
+            margin-top: 20px;
+            font-size: 16px;
+            font-style: italic;
+            color: #ffdd57;
+            text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+
+        /* Close Button */
+        .close {
+            color: white;
+            float: right;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #f44336;
+        }
+
+        /* Ember Icon */
+        .ember-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            margin-bottom: 15px;
+        }
+
+        /* Feature Section */
+        .features {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+        }
+
+        .feature-icon {
+            font-size: 24px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 50%;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Footer Text */
+        .footer-text {
+            margin-top: 20px;
+            font-size: 14px;
+            font-style: italic;
+            opacity: 0.8;
+        }
+
+        /* Modal Animation */
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Background Decorations -->
+    <div class="background">
+        <div class="circle small"></div>
+        <div class="circle medium"></div>
+        <div class="circle large"></div>
+        <div class="circle medium"></div>
+        <div class="circle small"></div>
+    </div>
+
+    <!-- Opening Page -->
+    <div class="opening-container" id="opening-page">
+
+        <img src="static/ember.png" alt="Chatbot Icon" id="opening-image">
+        <h1>Hello, I’m Ember! </h1>
+        <p>Your first aid companion. How can I help you?</p>
+        <button onclick="openChat()">I want to know...</button>
+        <button onclick="showMeetEmber()" style="margin-top: 10px;">🛈 Meet Ember</button>
+        <button onclick="showTheStory()" style="margin-top: 10px;">📖 The Story</button>
+</div>
+    </div>
+
+    <!-- The Story Modal -->
+    <div id="the-story-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeTheStory()">&times;</span>
+            <h2>The Story of Ember</h2>
+            <p>
+                When people encounter injuries or emergencies, they often turn to search engines for help. But the information found online can be overwhelming, confusing, and even contradictory.
+            </p>
+            <p>
+                Ember was created to solve this problem—a reliable, comforting safety companion that provides clear, accurate first-aid guidance during those critical moments.
+            </p>
+            <p class="highlight">Ember exists to simplify safety. Together, let's make emergencies less stressful and lives safer. 💡</p>
+        </div>
+    </div>
+    
+    <div id="meet-ember-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeMeetEmber()">&times;</span>
+            <img src="static/ember.png" alt="Ember Icon" class="ember-icon">
+            <h2>Meet Ember</h2>
+            <p>Hi! I’m Ember, your safety companion. Here to provide:</p>
+            <div class="features">
+                <div class="feature-item">
+                    <span class="feature-icon">💡</span>
+                    <p>Quick first-aid guidance for emergencies.</p>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🗣️</span>
+                    <p>Voice interaction for hands-free help.</p>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">📖</span>
+                    <p>Reliable safety tips and resources.</p>
+                </div>
+            </div>
+            <p class="footer-text">Let's work together to keep you safe!</p>
+        </div>
+    </div>
+    
+    
+    <!-- Chatbot Page -->
+    <div class="chat-container" id="chat-container">
+        <div class="chat-header">Ember
+            <button onclick="goBackToHome()" style="float: right; margin-right: 10px; background: none; border: none; font-size: 16px; color: white; cursor: pointer;"> ⬅ Home</button>
+        </div>
+        <div class="messages" id="messages"></div>
+        <div class="input-container">
+            <input type="text" id="user-input" placeholder="Type a message...">
+            <button onclick="startSpeechToText()">🗣️</button> <!-- Microphone Button for Speech-to-Text -->
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+        
+    <script>
+        function openChat() {
+            document.getElementById('opening-page').style.display = 'none';
+            document.getElementById('chat-container').style.display = 'flex';
+            emberGreet();
+        }
+
+        function emberGreet() {
+            const messages = document.getElementById("messages");
+
+            // Add Ember's message to the chat
+            const botMessage = document.createElement("div");
+            botMessage.classList.add("message", "bot-message");
+            botMessage.innerHTML = `
+                <div class="avatar bot-avatar">
+                    <img src="static/ember.png" alt="Bot Avatar">
+                </div>
+                <div class="message-text bot-text">Hi, I'm Ember. How can I help you?</div>
+            `;
+            messages.appendChild(botMessage);
+
+            // Scroll to the bottom of the chat
+            messages.scrollTop = messages.scrollHeight;
+
+            // Speak the greeting using TTS
+            speakText("Hi, I'm Ember. How can I help you?");
+        }
+
+
+        async function sendMessage() {
+            const userInput = document.getElementById("user-input").value.trim();
+            if (!userInput) return;
+
+            const messages = document.getElementById("messages");
+
+            // User Message
+            const userMessage = document.createElement("div");
+            userMessage.classList.add("message", "user-message");
+            userMessage.innerHTML = `
+                <div class="avatar user-avatar">U</div> <!-- Updated Avatar -->
+                <div class="message-text user-text">${userInput}</div>
+            `;
+            messages.appendChild(userMessage);
+            document.getElementById("user-input").value = "";
+
+            messages.scrollTop = messages.scrollHeight;
+
+            // Fetch Bot Response
+            const response = await fetch("/get_response", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ user_input: userInput }),
+            });
+            const data = await response.json();
+
+            // Bot Message
+            const botMessage = document.createElement("div");
+            botMessage.classList.add("message", "bot-message");
+            botMessage.innerHTML = `
+                <div class="avatar bot-avatar">
+                    <img src="static/ember.png" alt="Bot Avatar"> <!-- Updated Avatar -->
+                </div>
+                <div class="message-text bot-text">${data.response.replace(/\n/g, "<br>")}</div>
+            `;
+            messages.appendChild(botMessage);
+
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+    </script>
+<!-- Add this before the closing body tag -->
+<script>
+    // Initialize Speech Synthesis (TTS)
+    const synth = window.speechSynthesis;
+
+    // Initialize Speech Recognition (STT)
+    let recognition;
+    if ("webkitSpeechRecognition" in window) {
+        recognition = new webkitSpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = "en-US";
+    } else {
+        console.error("Speech Recognition is not supported in this browser.");
+        alert("Speech Recognition is not supported in your browser. Please use Chrome or Edge.");
+    }
+
+    // Function to handle Speech-to-Text (STT)
+    function startSpeechToText() {
+    try {
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+
+        recognition.lang = "en-US"; // Set language
+        recognition.interimResults = false; // Only return final results
+
+        // Trigger when speech starts
+        recognition.onstart = () => {
+            console.log("Speech recognition started...");
+            const messages = document.getElementById("messages");
+            const listeningMessage = document.createElement("div");
+            listeningMessage.classList.add("message", "bot-message");
+            listeningMessage.innerHTML = `
+                <div class="avatar bot-avatar">
+                    <img src="static/ember.png" alt="Bot Avatar">
+                </div>
+                <div class="message-text bot-text">I'm listening...</div>
+            `;
+            messages.appendChild(listeningMessage);
+            messages.scrollTop = messages.scrollHeight;
+        };
+
+        // Handle the result
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            console.log("Speech recognized:", transcript);
+
+            // Remove "I'm listening..." message
+            const messages = document.getElementById("messages");
+            const botMessages = messages.getElementsByClassName("bot-message");
+            if (botMessages.length > 0) {
+                botMessages[botMessages.length - 1].remove();
+            }
+
+            // Automatically send the message
+            document.getElementById("user-input").value = transcript;
+            sendMessage(); // Trigger the sendMessage function
+        };
+
+        // Handle errors
+        recognition.onerror = (event) => {
+            console.error("Speech recognition error:", event.error);
+            const messages = document.getElementById("messages");
+            const errorMessage = document.createElement("div");
+            errorMessage.classList.add("message", "bot-message");
+            errorMessage.innerHTML = `
+                <div class="avatar bot-avatar">
+                    <img src="static/ember.png" alt="Bot Avatar">
+                </div>
+                <div class="message-text bot-text">
+                    Sorry, I couldn't hear you. Please try again.
+                </div>
+            `;
+            messages.appendChild(errorMessage);
+            messages.scrollTop = messages.scrollHeight;
+        };
+
+        // Stop recognition when speech ends
+        recognition.onspeechend = () => {
+            console.log("Speech recognition ended.");
+            recognition.stop();
+        };
+
+        // Start recognition
+        recognition.start();
+    } catch (error) {
+        console.error("Speech Recognition API is not supported in this browser.", error);
+        alert("Speech Recognition API is not supported in your browser. Please use Google Chrome.");
+    }
+}
+
+
+    // Function to handle Text-to-Speech (TTS)
+    function speakText(text) {
+    if (!synth || !synth.getVoices().length) {
+        console.warn("TTS not supported or voices not available.");
+        return;
+    }
+
+    // Ensure voices are loaded
+    const voices = synth.getVoices();
+
+    // Select a comforting voice (adjust as needed)
+    const selectedVoice = voices.find((voice) => voice.name === "Microsoft Zira - English (United States)");
+
+    // Create the utterance
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "en-US";
+    utterance.voice = selectedVoice;
+
+    // Speak the text
+    synth.cancel(); // Cancel any ongoing speech
+    synth.speak(utterance);
+}
+
+
+       
+    // Send Message Function (Integrated with TTS)
+    async function sendMessage() {
+        const userInput = document.getElementById("user-input").value.trim();
+        if (!userInput) return;
+
+        const messages = document.getElementById("messages");
+
+        // User Message
+        const userMessage = document.createElement("div");
+        userMessage.classList.add("message", "user-message");
+        userMessage.innerHTML = `
+            <div class="avatar user-avatar">U</div>
+            <div class="message-text user-text">${userInput}</div>
+        `;
+        messages.appendChild(userMessage);
+        document.getElementById("user-input").value = "";
+
+        messages.scrollTop = messages.scrollHeight;
+
+        // Fetch Bot Response
+        const response = await fetch("/get_response", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ user_input: userInput }),
+        });
+        const data = await response.json();
+
+        // Bot Message
+        const botMessage = document.createElement("div");
+        botMessage.classList.add("message", "bot-message");
+        botMessage.innerHTML = `
+            <div class="avatar bot-avatar">
+                <img src="static/ember.png" alt="Bot Avatar">
+            </div>
+            <div class="message-text bot-text">${data.response.replace(/\n/g, "<br>")}</div>
+        `;
+        messages.appendChild(botMessage);
+
+        // Text-to-Speech (TTS) for Bot Response
+        speakText(data.response);
+
+        messages.scrollTop = messages.scrollHeight;
+    }
+</script>
+<script>
+    function toggleMusic() {
+        const music = document.getElementById('music.mp3');
+        if (music.paused) {
+            music.play();
+        } else {
+            music.pause();
+        }
+    }
+</script>
+
+<script>
+
+    const sound = new Audio('static/music.mp3');
+    sound.preload = 'auto'; // Preload the audio file
+
+    function playSound() {
+        sound.currentTime = 0; // Reset to the start
+        sound.play();
+    }
+    function goBackToHome() {
+        playSound(); // Play sound immediately
+        document.getElementById('chat-container').style.display = 'none'; // Hide chat
+        document.getElementById('opening-page').style.display = 'flex'; // Show home
+    }
+
+    function showMeetEmber() {
+        playSound(); // Play sound immediately
+        document.getElementById('meet-ember-modal').style.display = 'block';
+    }
+
+    function closeMeetEmber() {
+        document.getElementById('meet-ember-modal').style.display = 'none';
+    }
+    function showTheStory() {
+        playSound(); // Play sound immediately
+        document.getElementById('the-story-modal').style.display = 'block';
+    }
+
+    function closeTheStory() {
+        document.getElementById('the-story-modal').style.display = 'none';
+    }
+
+// Close the modal when clicking outside of it
+    window.onclick = function(event) {
+        const storyModal = document.getElementById('the-story-modal');
+        if (event.target === storyModal) {
+            storyModal.style.display = 'none';
+        }
+};
+
+
+// Close modal when clicking outside of it
+window.onclick = function(event) {
+    const modal = document.getElementById('meet-ember-modal');
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+};
+
+
+</script>
+
+
+
+
+    
+</body>
+</html>
